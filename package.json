@@ -1,7 +1,6 @@
 {
   "name": "sheets",
   "version": "0.1.0",
-  "private": true,
   "homepage": "http://mdivani.github.io/sheets",
   "dependencies": {
     "react": "^16.6.3",
