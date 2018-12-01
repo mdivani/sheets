@@ -1,21 +1,24 @@
 import * as React from 'react';
-import './App.css';
+import Container from "./components/Container";
+import Form from "./components/Form";
 import Table from './components/Table';
 
 class App extends React.Component {
 
   public state: any = {
     grid: [
-      [
-        {value: 'Column1', readOnly: true},
-        {value: 'Column2', readOnly: true},
-        {value: 'Column3', readOnly: true},
-      ],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}]
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
+    ],
+    headers: [
+      {value: 'Column1', readOnly: true},
+      {value: 'Column2', readOnly: true},
+      {value: 'Column3', readOnly: true},
+      {value: 'Column4', readOnly: true},
+      {value: 'Column5', readOnly: true},
     ]
   }
 
@@ -23,20 +26,50 @@ class App extends React.Component {
     this.setState({grid});
   }
 
-  // public onSubmit = (event:any) => {
-  //   event.preventDefault();
-  //   const { grid } = this.state;
-  //   const headers: object = grid[0];
+  public addRow = () => {
+    const newRow = [{readOnly: false, value: ""}, {value: ""}, {value: ""}];
+    const grid = this.state.grid;
+    grid.push(newRow);
+    this.setState({grid});
+  }
 
-  // }
+  public convertStateToPostData = ():object[] => {
+    const { headers } = this.state;
+    return this.state.grid.map((row: []) => {
+      let data = {};
+      row.forEach((item: any, index) => {
+        data = {
+          ...data,
+          [headers[index].value]: item.value
+        }
+      });
+      return data;
+    });
+  }
+
+  public postData = (data: object) => {
+    fetch("", data).then(() => {
+      // display png image from response
+    }).catch((error) => {
+      // handle error
+    });
+  }
+
+  public handleSubmit = () => {
+    const submitData: object[] = this.convertStateToPostData();
+    this.postData(submitData);
+  }
 
   public render() {
     return (
-      <div className="App">
-        <Table
-          grid={this.state.grid}
-          onGridChange={this.onGridChange} />
-      </div>
+        <Container>
+          <Form handleSubmit={this.handleSubmit}>
+            <Table
+              headers={this.state.headers}
+              grid={this.state.grid}
+              onGridChange={this.onGridChange} />   
+          </Form>
+        </Container>
     );
   }
 }
