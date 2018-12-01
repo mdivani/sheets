@@ -11,18 +11,22 @@ class App extends React.Component {
       [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
       [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
       [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
+      [{readOnly: false,  value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
     ],
     headers: [
-      {value: 'Column1', readOnly: true},
-      {value: 'Column2', readOnly: true},
-      {value: 'Column3', readOnly: true},
-      {value: 'Column4', readOnly: true},
-      {value: 'Column5', readOnly: true},
+      {value: 'Column1', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Column2', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Column3', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Column4', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Column5', className: "table__header", width: "12rem", readOnly: true},
     ]
   }
 
-  public onGridChange = (grid: []) => {
+  public onGridChange = (newGrid: []) => {
+    // ignore first row which is headers
+    const grid = newGrid.filter((item, index) => {
+      return index !== 0 ? item : null;
+    })
     this.setState({grid});
   }
 
@@ -50,6 +54,7 @@ class App extends React.Component {
   public postData = (data: object) => {
     fetch("", data).then(() => {
       // display png image from response
+      this.resetGrid();
     }).catch((error) => {
       // handle error
     });
@@ -60,13 +65,29 @@ class App extends React.Component {
     this.postData(submitData);
   }
 
+  public resetGrid = () => {
+    const grid = [
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
+      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
+    ];
+
+    this.setState({ grid });
+  }
+
   public render() {
+    const grid: any = [
+      this.state.headers,
+      ...this.state.grid
+    ];
+
     return (
         <Container>
           <Form handleSubmit={this.handleSubmit}>
             <Table
-              headers={this.state.headers}
-              grid={this.state.grid}
+              grid={grid}
               onGridChange={this.onGridChange} />   
           </Form>
         </Container>

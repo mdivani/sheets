@@ -1,10 +1,10 @@
 import * as React from "react";
 import DataSheet from 'react-datasheet';
 import 'react-datasheet/lib/react-datasheet.css';
+import "../css/components/table.css";
 
 interface IProps {
     grid: [];
-    headers: [];
     onGridChange: any;
 }
 
@@ -21,25 +21,23 @@ export default class Table extends React.Component<IProps> {
             ...this.props.grid
         ];
         changes.forEach(({cell, row, col, value}: any) => {
-          grid[row - 1][col] = {...grid[row - 1][col], value}
-        })
+          grid[row][col] = {...grid[row][col], value}
+        });
         this.props.onGridChange(grid);
     }
 
     public render() {
-        const grid = [
-            this.props.headers,
-            ...this.props.grid
-        ];
+        const {grid} = this.props;
 
         return (
             <DataSheet
+                className="table"
                 overflow="wrap"
                 data={grid}
                 valueRenderer={this.valueRenderer}
                 onContextMenu={this.onContextMenu}
                 onCellsChanged={this.onCellsChanged}
           />
-        )
+        );
     }
 }

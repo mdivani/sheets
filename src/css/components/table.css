@@ -1,0 +1,9 @@
+.table {
+    width: 100%;
+}
+
+.table__header {
+    line-height: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
