@@ -17,7 +17,7 @@ export default class Form extends React.Component<IProps> {
         return (
             <form className="form" onSubmit={this.onSubmit}>
                 {this.props.children}
-                <Button value="Send" />
+                <Button value="Send" extraClass="btn--primary" />
             </form>
         );
     }

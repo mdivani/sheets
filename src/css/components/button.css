@@ -2,8 +2,20 @@
     border: none;
     cursor: pointer;
     margin: 2rem auto;
-    padding: .5rem 1rem;
-    font-size: 1.5rem;
+    padding: .8rem 1.6rem;
+    font-size: 1.6rem;
     font-weight: 500;
+    transition: all .2s ease;
+}
+
+.btn--primary {
+    background-color: green;
+    color: white;
     text-transform: uppercase;
+}
+
+.btn--primary:hover,
+.btn--primary:focus,
+.btn--primary:active {
+    background-color: rgb(9, 93, 9);
 }
