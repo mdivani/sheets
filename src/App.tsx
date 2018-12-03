@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Container from "./components/Container";
+import Figure from './components/Figure';
 import Form from "./components/Form";
 import Loading from "./components/Loading";
 import Table from './components/Table';
@@ -15,11 +16,11 @@ class App extends React.Component {
       [{readOnly: false,  value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
     ],
     headers: [
-      {value: 'Column1', className: "table__header", width: "12rem", readOnly: true},
-      {value: 'Column2', className: "table__header", width: "12rem", readOnly: true},
-      {value: 'Column3', className: "table__header", width: "12rem", readOnly: true},
-      {value: 'Column4', className: "table__header", width: "12rem", readOnly: true},
-      {value: 'Column5', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Column1', className: "table__header", width: "12rem", readOnly: false},
+      {value: 'Column2', className: "table__header", width: "12rem", readOnly: false},
+      {value: 'Column3', className: "table__header", width: "12rem", readOnly: false},
+      {value: 'Column4', className: "table__header", width: "12rem", readOnly: false},
+      {value: 'Column5', className: "table__header", width: "12rem", readOnly: false},
     ],
     imgUrl: "",
     isLoading: false,
@@ -34,10 +35,30 @@ class App extends React.Component {
   }
 
   public addRow = () => {
-    const newRow = [{readOnly: false, value: ""}, {value: ""}, {value: ""}];
+    const newRow = this.createNewRow();
     const grid = this.state.grid;
     grid.push(newRow);
     this.setState({grid});
+  }
+
+  public createNewRow = () => {
+    return this.state.headers.map(() => {
+      return {value: ""};
+    });
+  }
+
+  public addColumn = () => {
+    const { grid, headers } = this.state;
+    headers.push({
+      className: "table__header", 
+      readOnly: false,
+      value: `column${headers.length + 1}`, 
+      width: "12rem", 
+    });
+    grid.forEach((item: object[]) => {
+      item.push({value: ""});
+    });
+    this.setState({grid, headers});
   }
 
   public convertStateToPostData = ():object[] => {
@@ -56,7 +77,7 @@ class App extends React.Component {
 
   public postData = (data: object) => {
     this.setState({isLoading: true});
-    return fetch("", {
+    return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/dummy", {
       method: 'POST',
       mode: 'cors',
       // tslint:disable-next-line:object-literal-sort-keys
@@ -65,11 +86,21 @@ class App extends React.Component {
           'Content-Type': 'application/json',
         },
       body: JSON.stringify(data)
-    }).then(() => {
+    }).then((response) => {
       // display png image from response
-      this.setState({isLoading: false}, this.resetGrid);
+      // tslint:disable-next-line:no-console
+      console.log(response);
+      if (response.status === 200) {
+        // set imgUrl to url from response
+        const imgUrl = response.url;
+        this.setState({isLoading: false, imgUrl});
+      } else {
+        this.setState({isLoading: false});
+      }
     }).catch((error) => {
       // handle error
+      // tslint:disable-next-line:no-console
+      console.log(error);
       this.setState({isLoading: false});
     });
   }
@@ -79,34 +110,40 @@ class App extends React.Component {
     this.postData(submitData);
   }
 
-  public resetGrid = () => {
-    const grid = [
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
-    ];
+  // public resetGrid = () => {
+  //   const grid = this.state.grid.map((row: []) => {
+  //     row.forEach((item: any) => {
+  //       item.value = "";
+  //     });
+  //     return row;
+  //   });
 
-    this.setState({ grid });
+  //   this.setState({ grid });
+  // }
+
+  public renderPage = () => {
+    if (!this.state.imgUrl) {
+      const grid: any = [
+        this.state.headers,
+        ...this.state.grid
+      ];
+
+      return this.state.isLoading ? <Loading /> :
+      <Form addNewRow={this.addRow} addNewColumn={this.addColumn} handleSubmit={this.handleSubmit}>
+        <Table
+          grid={grid}
+          onGridChange={this.onGridChange} />   
+      </Form>
+    } else {
+      return <Figure imgUrl={this.state.imgUrl} />
+    }
   }
 
   public render() {
-    const grid: any = [
-      this.state.headers,
-      ...this.state.grid
-    ];
 
     return (
         <Container>
-          {
-            this.state.isLoading ? <Loading /> :
-              <Form handleSubmit={this.handleSubmit}>
-                <Table
-                  grid={grid}
-                  onGridChange={this.onGridChange} />   
-              </Form>
-          }
+          { this.renderPage()}
         </Container>
     );
   }

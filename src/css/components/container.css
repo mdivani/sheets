@@ -1,6 +1,11 @@
 .container {
+    width: 100%;
     max-width: 104rem;
-    margin: 10% auto;
+    margin: 0 auto;
+    padding: 10% auto;
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    overflow-x: auto;
+    position: relative;
 }

@@ -5,12 +5,14 @@ interface IProps {
     value: string;
     handleClick?: any;
     extraClass?: string;
+    type?: string;
 }
 
-function Button ({ value, handleClick, extraClass = "" }: IProps) {
+function Button ({ value, type, handleClick, extraClass = "" }: IProps) {
 
     return (
         <button 
+            type={type}
             className={`btn ${extraClass}`}
             onClick={handleClick}>
             {value}

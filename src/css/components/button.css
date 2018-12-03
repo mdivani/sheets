@@ -19,3 +19,19 @@
 .btn--primary:active {
     background-color: rgb(9, 93, 9);
 }
+
+.btn--secondary {
+    background-color: lightblue;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.btn--secondary:hover,
+.btn--secondary:focus,
+.btn--secondary:active, {
+    background-color: rgb(143, 210, 233);
+}
+
+.btn--margin-s {
+    margin: 1rem 2rem;
+}
