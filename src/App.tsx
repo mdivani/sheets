@@ -79,25 +79,33 @@ class App extends React.Component {
     this.setState({isLoading: true});
     return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/dummy", {
       method: 'POST',
-      mode: 'cors',
+      // mode: 'cors',
       // tslint:disable-next-line:object-literal-sort-keys
       headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
       body: JSON.stringify(data)
-    }).then((response) => {
+    })
+    .then((response) => {
       // display png image from response
-      // tslint:disable-next-line:no-console
-      console.log(response);
       if (response.status === 200) {
         // set imgUrl to url from response
-        const imgUrl = response.url;
+        return response.json();
+      } else {
+        this.setState({isLoading: false});
+        return null;
+      }
+    })
+    .then((body: any) => {
+      if (body) {
+        const imgUrl = body.getUrl;
         this.setState({isLoading: false, imgUrl});
       } else {
         this.setState({isLoading: false});
       }
-    }).catch((error) => {
+    })
+    .catch((error) => {
       // handle error
       // tslint:disable-next-line:no-console
       console.log(error);
