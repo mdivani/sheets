@@ -79,7 +79,7 @@ class App extends React.Component {
     this.setState({isLoading: true});
     return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/dummy", {
       method: 'POST',
-      // mode: 'cors',
+      mode: 'cors',
       // tslint:disable-next-line:object-literal-sort-keys
       headers: {
           'Accept': 'application/json',
@@ -107,8 +107,6 @@ class App extends React.Component {
     })
     .catch((error) => {
       // handle error
-      // tslint:disable-next-line:no-console
-      console.log(error);
       this.setState({isLoading: false});
     });
   }
@@ -117,17 +115,6 @@ class App extends React.Component {
     const submitData: object[] = this.convertStateToPostData();
     this.postData(submitData);
   }
-
-  // public resetGrid = () => {
-  //   const grid = this.state.grid.map((row: []) => {
-  //     row.forEach((item: any) => {
-  //       item.value = "";
-  //     });
-  //     return row;
-  //   });
-
-  //   this.setState({ grid });
-  // }
 
   public renderPage = () => {
     if (!this.state.imgUrl) {
