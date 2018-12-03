@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Container from "./components/Container";
 import Form from "./components/Form";
+import Loading from "./components/Loading";
 import Table from './components/Table';
 
 class App extends React.Component {
@@ -19,7 +20,9 @@ class App extends React.Component {
       {value: 'Column3', className: "table__header", width: "12rem", readOnly: true},
       {value: 'Column4', className: "table__header", width: "12rem", readOnly: true},
       {value: 'Column5', className: "table__header", width: "12rem", readOnly: true},
-    ]
+    ],
+    imgUrl: "",
+    isLoading: false,
   }
 
   public onGridChange = (newGrid: []) => {
@@ -52,11 +55,22 @@ class App extends React.Component {
   }
 
   public postData = (data: object) => {
-    fetch("", data).then(() => {
+    this.setState({isLoading: true});
+    return fetch("", {
+      method: 'POST',
+      mode: 'cors',
+      // tslint:disable-next-line:object-literal-sort-keys
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      body: JSON.stringify(data)
+    }).then(() => {
       // display png image from response
-      this.resetGrid();
+      this.setState({isLoading: false}, this.resetGrid);
     }).catch((error) => {
       // handle error
+      this.setState({isLoading: false});
     });
   }
 
@@ -85,11 +99,14 @@ class App extends React.Component {
 
     return (
         <Container>
-          <Form handleSubmit={this.handleSubmit}>
-            <Table
-              grid={grid}
-              onGridChange={this.onGridChange} />   
-          </Form>
+          {
+            this.state.isLoading ? <Loading /> :
+              <Form handleSubmit={this.handleSubmit}>
+                <Table
+                  grid={grid}
+                  onGridChange={this.onGridChange} />   
+              </Form>
+          }
         </Container>
     );
   }
