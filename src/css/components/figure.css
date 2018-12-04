@@ -1,5 +1,6 @@
 .figure {
-    width: 40rem;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .figure__img {
