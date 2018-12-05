@@ -6,10 +6,20 @@ import Form from "./components/Form";
 import Loading from "./components/Loading";
 import Table from './components/Table';
 import TypeDropdown from "./components/TypeDropdown";
+import ICell from "./models/ICell";
+import Row from './models/Row';
+
+interface IState {
+  grid: ICell[][];
+  headers: any[];
+  imgUrl: string;
+  isLoading: boolean;
+  error: string;
+}
 
 class App extends React.Component {
 
-  public state: any = {
+  public state: IState = {
     grid: [
       [
         {readOnly: false, value: "", dataEditor: TypeDropdown },
@@ -49,6 +59,7 @@ class App extends React.Component {
     ],
     imgUrl: "",
     isLoading: false,
+    error: "",
   }
 
   public onGridChange = (newGrid: []) => {
@@ -56,7 +67,7 @@ class App extends React.Component {
     const grid = newGrid.filter((item, index) => {
       return index !== 0 ? item : null;
     })
-    this.setState({grid});
+    this.setState({grid, error: ""});
   }
 
   public addRow = () => {
@@ -100,16 +111,34 @@ class App extends React.Component {
 
   public convertStateToPostData = ():object[] => {
     const { headers } = this.state;
-    return this.state.grid.map((row: []) => {
+    return this.state.grid.reduce((filtered, row: ICell[]) => {
+
       let data = {};
-      row.forEach((item: any, index) => {
-        data = {
-          ...data,
-          [headers[index].value]: item.value
+      row.forEach((cell: any, index) => {
+        if (index > 4) {
+          data = {
+            ...data,
+            [headers[index].value]: cell.value
+          }          
         }
       });
-      return data;
-    });
+
+      const currentRow = new Row({
+        type: row[0].value,
+        // tslint:disable-next-line:object-literal-sort-keys
+        project: row[1].value,
+        startDate: row[2].value,
+        endDate: row[3].value,
+        dependsOn: row[4].value,
+        extraCols: data
+      });
+
+      if (currentRow.isComplete()) {
+        filtered.push(currentRow.getFormattedRow());
+      }
+
+      return filtered;
+    }, []);
   }
 
   public postData = (data: object) => {
@@ -150,7 +179,14 @@ class App extends React.Component {
 
   public handleSubmit = () => {
     const submitData: object[] = this.convertStateToPostData();
-    this.postData(submitData);
+    // tslint:disable-next-line:no-console
+    console.log(submitData);
+    if (submitData.length > 0) {
+      this.postData(submitData);
+    } else {
+      const error = "Please fill neccessary cells";
+      this.setState({error});
+    }
   }
 
   public renderPage = () => {
@@ -162,6 +198,7 @@ class App extends React.Component {
 
       return this.state.isLoading ? <Loading /> :
       <Form addNewRow={this.addRow} addNewColumn={this.addColumn} handleSubmit={this.handleSubmit}>
+        <p className="error">{this.state.error}</p>
         <Table
           grid={grid}
           onGridChange={this.onGridChange} />   

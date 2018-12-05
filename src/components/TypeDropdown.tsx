@@ -12,7 +12,7 @@ export default class TypeDropdown extends React.Component<any> {
     public render() {
 
         return (
-            <select className="dropdown" onChange={this.onSelectChange} defaultValue={Types[Types.blank]}>
+            <select className="dropdown" onChange={this.onSelectChange} >
                 <option value={Types.blank} >&nbsp;</option>
                 <option value={Types.project} >{Types[Types.project]}</option>
                 <option value={Types.milestone} >{Types[Types.milestone]}</option>

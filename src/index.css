@@ -12,3 +12,9 @@ body {
   font-family: sans-serif;
   box-sizing: border-box;
 }
+
+.error {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: red;
+}
