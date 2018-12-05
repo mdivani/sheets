@@ -24,12 +24,6 @@ class App extends React.Component {
       [
         {readOnly: false, value: "", dataEditor: TypeDropdown },
         {value: ""},
-        {value: "", dataEditor: DatePicker}, 
-        {value: "",  dataEditor: DatePicker}, 
-        {value: ""}
-      ],
-      [
-        {value: "", dataEditor: TypeDropdown },
         {value: ""},
         {value: "", dataEditor: DatePicker}, 
         {value: "",  dataEditor: DatePicker}, 
@@ -37,6 +31,15 @@ class App extends React.Component {
       ],
       [
         {value: "", dataEditor: TypeDropdown },
+        {value: ""},
+        {value: ""},
+        {value: "", dataEditor: DatePicker}, 
+        {value: "",  dataEditor: DatePicker}, 
+        {value: ""}
+      ],
+      [
+        {value: "", dataEditor: TypeDropdown },
+        {value: ""},
         {value: ""},
         {value: "", dataEditor: DatePicker}, 
         {value: "",  dataEditor: DatePicker}, 
@@ -45,6 +48,7 @@ class App extends React.Component {
       [
         {value: "", dataEditor: TypeDropdown },
         {value: ""},
+        {value: ""},
         {value: "", dataEditor: DatePicker}, 
         {value: "",  dataEditor: DatePicker}, 
         {value: ""}
@@ -52,9 +56,10 @@ class App extends React.Component {
     ],
     headers: [
       {value: 'Type', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Name', className: "table__header", width: "12rem", readOnly: true},
       {value: 'Project', className: "table__header", width: "12rem", readOnly: true},
-      {value: 'Start Date', className: "table__header", width: "12rem", readOnly: true},
-      {value: 'End Date', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'StartDate', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'EndDate', className: "table__header", width: "12rem", readOnly: true},
       {value: 'Depends On', className: "table__header", width: "12rem", readOnly: true},
     ],
     imgUrl: "",
@@ -79,13 +84,13 @@ class App extends React.Component {
 
   public createNewRow = () => {
     return this.state.headers.map((cell: any, index: number) => {
-      if (index === 0) {
+      if (cell.value === "Type") {
         return {
           dataEditor: TypeDropdown,
           value: ""
         }
       } 
-      else if( index === 2 || index === 3) {
+      else if( cell.value === "StartDate" || cell.value === "EndDate") {
         return {
             dataEditor: DatePicker,
             value: ""
@@ -143,7 +148,7 @@ class App extends React.Component {
 
   public postData = (data: object) => {
     this.setState({isLoading: true});
-    return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/dummy", {
+    return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/ganttv3", {
       method: 'POST',
       mode: 'cors',
       // tslint:disable-next-line:object-literal-sort-keys
@@ -173,6 +178,8 @@ class App extends React.Component {
     })
     .catch((error) => {
       // handle error
+      // tslint:disable-next-line:no-console
+      console.log(error);
       this.setState({isLoading: false});
     });
   }
@@ -182,7 +189,7 @@ class App extends React.Component {
     // tslint:disable-next-line:no-console
     console.log(submitData);
     if (submitData.length > 0) {
-      this.postData(submitData);
+      this.postData({body: submitData});
     } else {
       const error = "Please fill neccessary cells";
       this.setState({error});
