@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "http://mdivani.github.io/sheets",
   "dependencies": {
+    "moment": "^2.22.2",
     "react": "^16.6.3",
     "react-datasheet": "^1.3.9",
     "react-dom": "^16.6.3",

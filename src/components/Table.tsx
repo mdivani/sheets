@@ -2,6 +2,7 @@ import * as React from "react";
 import DataSheet from 'react-datasheet';
 import 'react-datasheet/lib/react-datasheet.css';
 import "../css/components/table.css";
+import ValueViewer from "./ValueViewer";
 
 interface IProps {
     grid: [];
@@ -35,6 +36,7 @@ export default class Table extends React.Component<IProps> {
                 overflow="wrap"
                 data={grid}
                 valueRenderer={this.valueRenderer}
+                valueViewer={ValueViewer}
                 onContextMenu={this.onContextMenu}
                 onCellsChanged={this.onCellsChanged}
           />

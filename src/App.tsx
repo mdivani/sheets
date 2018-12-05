@@ -1,26 +1,51 @@
 import * as React from 'react';
 import Container from "./components/Container";
+import DatePicker from "./components/DatePicker";
 import Figure from './components/Figure';
 import Form from "./components/Form";
 import Loading from "./components/Loading";
 import Table from './components/Table';
+import TypeDropdown from "./components/TypeDropdown";
 
 class App extends React.Component {
 
   public state: any = {
     grid: [
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false, value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}],
-      [{readOnly: false,  value: ""}, {value: ""}, {value: ""}, {value: ""}, {value: ""}]
+      [
+        {readOnly: false, value: "", dataEditor: TypeDropdown },
+        {value: ""},
+        {value: "", dataEditor: DatePicker}, 
+        {value: "",  dataEditor: DatePicker}, 
+        {value: ""}
+      ],
+      [
+        {value: "", dataEditor: TypeDropdown },
+        {value: ""},
+        {value: "", dataEditor: DatePicker}, 
+        {value: "",  dataEditor: DatePicker}, 
+        {value: ""}
+      ],
+      [
+        {value: "", dataEditor: TypeDropdown },
+        {value: ""},
+        {value: "", dataEditor: DatePicker}, 
+        {value: "",  dataEditor: DatePicker}, 
+        {value: ""}
+     ],
+      [
+        {value: "", dataEditor: TypeDropdown },
+        {value: ""},
+        {value: "", dataEditor: DatePicker}, 
+        {value: "",  dataEditor: DatePicker}, 
+        {value: ""}
+      ],
     ],
     headers: [
-      {value: 'Column1', className: "table__header", width: "12rem", readOnly: false},
-      {value: 'Column2', className: "table__header", width: "12rem", readOnly: false},
-      {value: 'Column3', className: "table__header", width: "12rem", readOnly: false},
-      {value: 'Column4', className: "table__header", width: "12rem", readOnly: false},
-      {value: 'Column5', className: "table__header", width: "12rem", readOnly: false},
+      {value: 'Type', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Project', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Start Date', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'End Date', className: "table__header", width: "12rem", readOnly: true},
+      {value: 'Depends On', className: "table__header", width: "12rem", readOnly: true},
     ],
     imgUrl: "",
     isLoading: false,
@@ -42,7 +67,19 @@ class App extends React.Component {
   }
 
   public createNewRow = () => {
-    return this.state.headers.map(() => {
+    return this.state.headers.map((cell: any, index: number) => {
+      if (index === 0) {
+        return {
+          dataEditor: TypeDropdown,
+          value: ""
+        }
+      } 
+      else if( index === 2 || index === 3) {
+        return {
+            dataEditor: DatePicker,
+            value: ""
+        }
+      }
       return {value: ""};
     });
   }
