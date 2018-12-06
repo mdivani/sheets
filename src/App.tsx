@@ -148,8 +148,6 @@ class App extends React.Component {
   }
 
   public postData = (data: object) => {
-    // tslint:disable-next-line:no-console
-    console.log(data);
     this.setState({isLoading: true});
     return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/ganttv3", {
       method: 'POST',
@@ -181,16 +179,12 @@ class App extends React.Component {
     })
     .catch((error) => {
       // handle error
-      // tslint:disable-next-line:no-console
-      console.log(error);
       this.setState({isLoading: false});
     });
   }
 
   public handleSubmit = () => {
     const submitData: object[] = this.convertStateToPostData();
-    // tslint:disable-next-line:no-console
-    console.log(submitData);
     if (submitData.length > 0) {
       this.postData(submitData);
     } else {
