@@ -38,7 +38,7 @@ export default class BirthDateForm extends React.Component<IProps, IState> {
         days: 31,
         currentYear: new Date().getFullYear(),
         selectedDay: 1,
-        selectedYear: 1960,
+        selectedYear: new Date().getFullYear(),
     };
 
     public componentDidMount() {

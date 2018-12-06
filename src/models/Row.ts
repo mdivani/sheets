@@ -6,6 +6,7 @@ const DEFAULT_CONFIG = {
 
 export interface IRow {
     type: string;
+    name: string;
     project: string;
     startDate: string;
     endDate: string;
@@ -15,12 +16,13 @@ export interface IRow {
 
 export enum Types {
     blank,
-    project,
+    task,
     milestone
 }
 
 export default class Row implements IRow {
     public type: string;
+    public name: string;
     public project: string;
     public startDate: string;
     public endDate: string;
@@ -30,11 +32,13 @@ export default class Row implements IRow {
     constructor(params: IRow = {
         type: "",
         // tslint:disable-next-line:object-literal-sort-keys
+        name: "",
         project: "",
         startDate: "",
         endDate: ""
     }) {
         this.type = params.type || "";
+        this.name = params.name || "";
         this.project = params.project || "";
         this.startDate = params.startDate || "";
         this.endDate = params.endDate || "";
@@ -49,12 +53,13 @@ export default class Row implements IRow {
     public getFormattedRow = () => {
         if (this.isComplete()) {
             return {
-            type: this.type,
+            Type: this.type,
             // tslint:disable-next-line:object-literal-sort-keys
-            project: this.project,
-            startDate: this.startDate,
-            endDate: this.endDate,
-            dependsOn: this.dependsOn,
+            Name: this.name,
+            Project: this.project,
+            StartDate: this.startDate,
+            EndDate: this.endDate,
+            DependsOn: this.dependsOn,
             ...this.extraCols
             } 
         }
@@ -62,7 +67,7 @@ export default class Row implements IRow {
     }
 
     private checkType = (): boolean => {
-        return this.type === "milestone" || this.type === "project";
+        return !!this.type;
     }
 
     private checkStartDate = (): boolean => {
@@ -73,7 +78,7 @@ export default class Row implements IRow {
     }
 
     private checkEndDate = (): boolean => {
-        if (this.type === "milestone") {
+        if (this.type.toLowerCase() === "milestone") {
             return true;
         }
         else if(this.endDate) {

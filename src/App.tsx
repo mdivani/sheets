@@ -131,10 +131,11 @@ class App extends React.Component {
       const currentRow = new Row({
         type: row[0].value,
         // tslint:disable-next-line:object-literal-sort-keys
-        project: row[1].value,
-        startDate: row[2].value,
-        endDate: row[3].value,
-        dependsOn: row[4].value,
+        name: row[1].value,
+        project: row[2].value,
+        startDate: row[3].value,
+        endDate: row[4].value,
+        dependsOn: row[5].value,
         extraCols: data
       });
 
@@ -189,7 +190,7 @@ class App extends React.Component {
     // tslint:disable-next-line:no-console
     console.log(submitData);
     if (submitData.length > 0) {
-      this.postData({body: submitData});
+      this.postData(submitData);
     } else {
       const error = "Please fill neccessary cells";
       this.setState({error});
