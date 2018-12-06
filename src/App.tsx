@@ -120,7 +120,7 @@ class App extends React.Component {
 
       let data = {};
       row.forEach((cell: any, index) => {
-        if (index > 4) {
+        if (index > 5 && cell.value.length > 0) {
           data = {
             ...data,
             [headers[index].value]: cell.value
@@ -148,6 +148,8 @@ class App extends React.Component {
   }
 
   public postData = (data: object) => {
+    // tslint:disable-next-line:no-console
+    console.log(data);
     this.setState({isLoading: true});
     return fetch("https://x2a1dhh6ig.execute-api.eu-west-1.amazonaws.com/Prod/ganttv3", {
       method: 'POST',
