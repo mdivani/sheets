@@ -38,7 +38,7 @@ export default class BirthDateForm extends React.Component<IProps, IState> {
         days: 31,
         currentYear: new Date().getFullYear(),
         selectedDay: 1,
-        selectedYear: 1960,
+        selectedYear: new Date().getFullYear(),
     };
 
     public componentDidMount() {
@@ -86,6 +86,17 @@ export default class BirthDateForm extends React.Component<IProps, IState> {
         return (
             <div className="datepicker">
                 <select
+                    className="datepicker__select margin-l-s"
+                    disabled={this.props.disable}
+                    onChange={this.onSelectedDayChange}
+                    value={selectedDay}>
+                    {
+                        this.createDaysArr(days).map((day) => {
+                            return <option key={day} value={day}>{day}</option>;
+                        })
+                    }
+                </select>
+                <select
                     className="datepicker__select"
                     disabled={this.props.disable}
                     onChange={this.onSelectedMonthChange}
@@ -102,17 +113,6 @@ export default class BirthDateForm extends React.Component<IProps, IState> {
                     <option value={Months.oct}>Oct</option>
                     <option value={Months.nov}>Nov</option>
                     <option value={Months.dec}>Dec</option>
-                </select>
-                <select
-                    className="datepicker__select margin-l-s"
-                    disabled={this.props.disable}
-                    onChange={this.onSelectedDayChange}
-                    value={selectedDay}>
-                    {
-                        this.createDaysArr(days).map((day) => {
-                            return <option key={day} value={day}>{day}</option>;
-                        })
-                    }
                 </select>
                 <select
                     className="datepicker__select margin-l-s"
