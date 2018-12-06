@@ -16,7 +16,7 @@ export interface IRow {
 
 export enum Types {
     blank,
-    project,
+    task,
     milestone
 }
 
@@ -78,7 +78,7 @@ export default class Row implements IRow {
     }
 
     private checkEndDate = (): boolean => {
-        if (this.type === "milestone") {
+        if (this.type.toLowerCase() === "milestone") {
             return true;
         }
         else if(this.endDate) {
