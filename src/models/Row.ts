@@ -67,7 +67,7 @@ export default class Row implements IRow {
     }
 
     private checkType = (): boolean => {
-        return this.type === "milestone" || this.type === "project";
+        return !!this.type;
     }
 
     private checkStartDate = (): boolean => {
