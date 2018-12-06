@@ -6,6 +6,7 @@ const DEFAULT_CONFIG = {
 
 export interface IRow {
     type: string;
+    name: string;
     project: string;
     startDate: string;
     endDate: string;
@@ -21,6 +22,7 @@ export enum Types {
 
 export default class Row implements IRow {
     public type: string;
+    public name: string;
     public project: string;
     public startDate: string;
     public endDate: string;
@@ -30,11 +32,13 @@ export default class Row implements IRow {
     constructor(params: IRow = {
         type: "",
         // tslint:disable-next-line:object-literal-sort-keys
+        name: "",
         project: "",
         startDate: "",
         endDate: ""
     }) {
         this.type = params.type || "";
+        this.name = params.name || "",
         this.project = params.project || "";
         this.startDate = params.startDate || "";
         this.endDate = params.endDate || "";
@@ -49,12 +53,13 @@ export default class Row implements IRow {
     public getFormattedRow = () => {
         if (this.isComplete()) {
             return {
-            type: this.type,
+            Type: this.type,
             // tslint:disable-next-line:object-literal-sort-keys
-            project: this.project,
-            startDate: this.startDate,
-            endDate: this.endDate,
-            dependsOn: this.dependsOn,
+            Name: this.name,
+            Project: this.project,
+            StartDate: this.startDate,
+            EndDate: this.endDate,
+            DependsOn: this.dependsOn,
             ...this.extraCols
             } 
         }
